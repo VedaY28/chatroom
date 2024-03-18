@@ -7,9 +7,8 @@ import { supabaseBrowser } from "@/lib/supabase/browser";
 import { toast } from "sonner";
 
 export default function ListMessages() {
-
   const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
-  const { messages, addMessage, optimisticIds } = useMessage((state) => state);
+  const { messages, addMessage, optimisticIds, deleteMessage, editMessage } = useMessage((state) => state);
 
   const supabase = supabaseBrowser();
 
@@ -21,14 +20,14 @@ export default function ListMessages() {
         { event: "INSERT", schema: "public", table: "messages" },
         async (payload) => {
           // console.log("New message received:", payload.new);
-  
+
           if (!optimisticIds.includes(payload.new.id)) {
             const { error, data } = await supabase
               .from("users")
               .select("*")
               .eq("id", payload.new.send_by)
               .single();
-  
+
             if (error) {
               toast.error(error.message);
             } else {
@@ -42,23 +41,40 @@ export default function ListMessages() {
           }
         }
       )
+      .on(
+        "postgres_changes",
+        { event: "DELETE", schema: "public", table: "messages" },
+        (payload) => {
+          deleteMessage(payload.old.id)
+        }
+      )
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "messages" },
+        (payload) => {
+          editMessage(payload.new as Imessage);
+        }
+      )
       .subscribe();
-  
+
     return () => {
       channel.unsubscribe();
     };
   }, [messages]);
 
-  useEffect(()=>{
+  useEffect(() => {
     const scrollContainer = scrollRef.current;
 
-    if(scrollContainer){
+    if (scrollContainer) {
       scrollContainer.scrollTop = scrollContainer.scrollHeight;
     }
-  },[messages]);
+  }, [messages]);
 
   return (
-    <div className="flex-1 flex flex-col p-5 h-full overflow-y-auto" ref={scrollRef}>
+    <div
+      className="flex-1 flex flex-col p-5 h-full overflow-y-auto"
+      ref={scrollRef}
+    >
       <div className="flex-1"></div>
 
       <div className=" space-y-7">
