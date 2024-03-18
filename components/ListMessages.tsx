@@ -1,14 +1,17 @@
 "use client";
 import { Imessage, useMessage } from "@/lib/store/messages";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Message from "./Message";
 import { DeleteAlert, EditAlert } from "./MessageActions";
 import { supabaseBrowser } from "@/lib/supabase/browser";
 import { toast } from "sonner";
+import { ArrowDown } from "lucide-react";
 
 export default function ListMessages() {
   const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
-  const { messages, addMessage, optimisticIds, deleteMessage, editMessage } = useMessage((state) => state);
+  const [userScrolled, setUserScrolled] = useState(false);
+  const { messages, addMessage, optimisticIds, deleteMessage, editMessage } =
+    useMessage((state) => state);
 
   const supabase = supabaseBrowser();
 
@@ -45,7 +48,7 @@ export default function ListMessages() {
         "postgres_changes",
         { event: "DELETE", schema: "public", table: "messages" },
         (payload) => {
-          deleteMessage(payload.old.id)
+          deleteMessage(payload.old.id);
         }
       )
       .on(
@@ -70,10 +73,27 @@ export default function ListMessages() {
     }
   }, [messages]);
 
+  const handleOnScroll = () => {
+    const scrollContainer = scrollRef.current;
+    if (scrollContainer) {
+      const isScroll =
+        scrollContainer.scrollTop <
+        scrollContainer.scrollHeight - scrollContainer.clientHeight - 10;
+      // console.log(isScroll);
+      setUserScrolled(isScroll);
+    }
+  };
+
+  const scrollDown = () => {
+    scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+  };
+
+
   return (
     <div
       className="flex-1 flex flex-col p-5 h-full overflow-y-auto"
       ref={scrollRef}
+      onScroll={handleOnScroll}
     >
       <div className="flex-1"></div>
 
@@ -83,6 +103,13 @@ export default function ListMessages() {
         })}
       </div>
 
+      {userScrolled && (
+        <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2">
+          <div className="w-40 h-10 bg-blue-500 rounded-full justify-center items-center flex mx-auto border cursor-pointer hover:scale-110 transition-all" onClick={scrollDown}>
+            Scroll <ArrowDown /> Down
+          </div>
+        </div>
+      )}
       <DeleteAlert />
       <EditAlert />
     </div>
