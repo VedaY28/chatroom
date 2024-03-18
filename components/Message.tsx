@@ -35,9 +35,12 @@ export default function Message({ message }: { message: Imessage }) {
             <h1 className="text-sm text-gray-400">
               {new Date(message.created_at).toDateString()}
             </h1>
+            {message.is_edit && (
+              <h1 className="text-sm text-gray-400">Edited</h1>
+            )}
           </div>
           {/* Render MessageMenu component if the message's user ID matches the current user's ID */}
-          {message.users?.id === user?.id && <MessageMenu message={message}/>}
+          {message.users?.id === user?.id && <MessageMenu message={message} />}
         </div>
         <p className="text-gray-300">{message.text}</p>
       </div>
@@ -45,8 +48,8 @@ export default function Message({ message }: { message: Imessage }) {
   );
 }
 
-const MessageMenu = ({message}:{message:Imessage}) => {
-  const setActionMessage = useMessage((state) => state.setActionMessage)
+const MessageMenu = ({ message }: { message: Imessage }) => {
+  const setActionMessage = useMessage((state) => state.setActionMessage);
 
   return (
     <DropdownMenu>
@@ -58,12 +61,23 @@ const MessageMenu = ({message}:{message:Imessage}) => {
         <DropdownMenuLabel>Action</DropdownMenuLabel>
         <DropdownMenuSeparator />
 
-        <DropdownMenuItem>Edit</DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => {
+            document.getElementById("trigger-edit")?.click();
+            setActionMessage(message);
+          }}
+        >
+          Edit
+        </DropdownMenuItem>
 
-        <DropdownMenuItem onClick={() =>{
-          document.getElementById("trigger-delete")?.click();
-          setActionMessage(message);
-        }}>Delete</DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => {
+            document.getElementById("trigger-delete")?.click();
+            setActionMessage(message);
+          }}
+        >
+          Delete
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

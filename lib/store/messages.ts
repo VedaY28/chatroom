@@ -20,12 +20,36 @@ interface MessageState {
   actionMessage: Imessage | undefined;
   addMessage: (message: Imessage) => void;
   setActionMessage: (message: Imessage | undefined) => void;
+  deleteMessage: (messageId: string) => void;
+  editMessage: (message: Imessage) => void;
 }
 
 export const useMessage = create<MessageState>()((set) => ({
   messages: [],
   actionMessage: undefined,
+
   addMessage: (message) =>
     set((state) => ({ messages: [...state.messages, message] })),
+
   setActionMessage: (message) => set(() => ({ actionMessage: message })),
+
+  deleteMessage: (messageId) =>
+    set((state) => {
+      return {
+        messages: state.messages.filter((message) => message.id !== messageId),
+      };
+    }),
+
+  editMessage: (updateMessage) =>
+    set((state) => {
+      return {
+        messages: state.messages.filter((message) => {
+          if (message.id === updateMessage.id) {
+            (message.text = updateMessage.text),
+              (message.is_edit = updateMessage.is_edit);
+          }
+          return message;
+        }),
+      };
+    }),
 }));
