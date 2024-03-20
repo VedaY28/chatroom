@@ -109,7 +109,7 @@ export default function ListMessages() {
   return (
     <>
       <div
-        className="flex-1 flex flex-col p-5 h-full overflow-y-auto gap-5"
+        className="flex-1 flex flex-col p-5 h-full overflow-y-auto gap-5 bg-gradient-to-r from-orange-300 to-red-300" //bg-yellow-100
         ref={scrollRef}
         onScroll={handleOnScroll}
       >
@@ -127,7 +127,7 @@ export default function ListMessages() {
       </div>
 
       {userScrolled && (
-        <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2">
+        <div className="absolute bottom-[90px] left-1/2 transform -translate-x-1/2">
           {notification ? (
             <div className="flex justify-center">
               <div
@@ -141,7 +141,7 @@ export default function ListMessages() {
             </div>
           ) : (
             <div
-              className="w-40 h-10 bg-blue-500 rounded-full justify-center items-center flex mx-auto border cursor-pointer hover:scale-110 transition-all"
+              className="w-40 h-10 text-white bg-blue-500 rounded-full justify-center items-center flex mx-auto border cursor-pointer hover:scale-110 transition-all"
               onClick={scrollDown}
             >
               Scroll <ArrowDown /> Down

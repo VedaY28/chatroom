@@ -42,7 +42,7 @@ export default function ChatInput() {
 	};
 
 	return (
-		<div className="p-5">
+		<div className="p-5 bg-gradient-to-r from-indigo-500 to-teal-500">
 			<Input
 				placeholder="Send Message"
 				onKeyDown={(e) => {

@@ -32,7 +32,7 @@ export default function LoadMoreMessages() {
 
   if (hasMore) {
     return (
-      <Button variant="outline" className="w-full" onClick={fetchMore}>
+      <Button variant="outline" className="w-full text-white bg-gradient-to-r from-pink-600 to-blue-600" onClick={fetchMore}>
         Load More
       </Button>
     );

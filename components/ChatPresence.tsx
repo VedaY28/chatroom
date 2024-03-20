@@ -35,8 +35,8 @@ export default function ChatPresence() {
 
   return (
     <div className="flex items-center gap-1">
-      <div className="h-4 w-4 bg-green-500 rounded-full animate animate-pulse"></div>
-      <h1 className="text-sm text-gray-400">{onlineUser} Online</h1>
+      <div className="h-4 w-4 bg-green-600 rounded-full animate animate-pulse"></div>
+      <h1 className="text-sm font-bold text-yellow-500">{onlineUser} Online</h1>
     </div>
   );
 }
