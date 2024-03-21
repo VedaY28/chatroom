@@ -31,7 +31,7 @@ export default function Message({ message }: { message: Imessage }) {
       <div className="flex-1">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1">
-            <h1 className="font-bold text-black">{message.users?.display_name}</h1>
+            <h1 className="font-bold text-lg text-black">{message.users?.display_name}</h1>
             <h1 className="text-xs text-gray-500">
               {new Date(message.created_at).toDateString()}
             </h1>
@@ -42,7 +42,7 @@ export default function Message({ message }: { message: Imessage }) {
           {/* Render MessageMenu component if the message's user ID matches the current user's ID */}
           {message.users?.id === user?.id && <MessageMenu message={message} />}
         </div>
-        <p className="text-purple-500">{message.text}</p>
+        <p className="text-purple-800 font-semibold ">{message.text}</p>
       </div>
     </div>
   );
