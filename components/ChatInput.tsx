@@ -12,6 +12,7 @@ export default function ChatInput() {
 	const addMessage = useMessage((state) => state.addMessage);
 	const setOptimisticIds = useMessage((state) => state.setOptimisticIds);
 	const supabase = supabaseBrowser();
+
 	const handleSendMessage = async (text: string) => {
 		if (text.trim()) {
 			const id = uuidv4();
@@ -25,7 +26,7 @@ export default function ChatInput() {
 					id: user?.id,
 					avatar_url: user?.user_metadata.avatar_url,
 					created_at: new Date().toISOString(),
-					display_name: user?.user_metadata.user_name,
+					display_name: user?.user_metadata.user_name || user?.user_metadata.custom_claims.global_name,
 				},
 			};
 			addMessage(newMessage as Imessage);
@@ -44,6 +45,7 @@ export default function ChatInput() {
 	return (
 		<div className="p-5 bg-gradient-to-r from-indigo-500 to-teal-500">
 			<Input
+				className="font-bold"
 				placeholder="Send Message"
 				onKeyDown={(e) => {
 					if (e.key === "Enter") {
