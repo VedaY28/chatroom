@@ -15,7 +15,7 @@ export default function ChatHeader({ user }: { user: User | undefined }) {
   const [darkMode, setDarkMode] = useState(false);
   const [loginOptionsOpen, setLoginOptionsOpen] = useState(false);
 
-  console.log(user);
+  // console.log(user);
 
 
   const toggleDarkMode = () => {
