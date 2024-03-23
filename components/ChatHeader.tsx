@@ -15,7 +15,6 @@ export default function ChatHeader({ user }: { user: User | undefined }) {
   const [darkMode, setDarkMode] = useState(false);
   const [loginOptionsOpen, setLoginOptionsOpen] = useState(false);
 
-  // console.log(user);
   console.log(user);
 
 
@@ -49,9 +48,19 @@ export default function ChatHeader({ user }: { user: User | undefined }) {
     });
   };
 
+  // const handleLoginWithGoogle = () => {
+  //   toast.message("Google Is Not Implemented Yet");
+  // };
+
   const handleLoginWithGoogle = () => {
-    toast.message("Google Is Not Implemented Yet");
-  }
+    const supabase = supabaseBrowser();
+    supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: location.origin + "/auth/callback",
+      },
+    });
+  };
 
   const handleLogout = async () => {
     const supabase = supabaseBrowser();

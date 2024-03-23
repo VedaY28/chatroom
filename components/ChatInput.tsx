@@ -16,6 +16,7 @@ export default function ChatInput() {
 	const handleSendMessage = async (text: string) => {
 		if (text.trim()) {
 			const id = uuidv4();
+			const globalName = user?.user_metadata?.custom_claims?.global_name;
 			const newMessage = {
 				id,
 				text,
@@ -26,7 +27,7 @@ export default function ChatInput() {
 					id: user?.id,
 					avatar_url: user?.user_metadata.avatar_url,
 					created_at: new Date().toISOString(),
-					display_name: user?.user_metadata.user_name || user?.user_metadata.custom_claims.global_name,
+					display_name: user?.user_metadata.user_name || globalName || user?.user_metadata.full_name,
 				},
 			};
 			addMessage(newMessage as Imessage);
