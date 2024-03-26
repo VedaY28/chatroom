@@ -57,7 +57,8 @@ export function DeleteAlert() {
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete your message.
+            This action cannot be undone. This will permanently delete your
+            message.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
@@ -72,25 +73,26 @@ export function DeleteAlert() {
 }
 
 export function EditAlert() {
-
   const actionMessage = useMessage((state) => state.actionMessage);
   const editMessage = useMessage((state) => state.editMessage);
 
-  const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>
+  const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
 
   const handleEdit = async () => {
-
     const supabase = supabaseBrowser();
-    const text = inputRef.current.value.trim()
+    const text = inputRef.current.value.trim();
 
-    if(text){
+    if (text) {
       editMessage({
         ...actionMessage,
         text,
-        is_edit:true,
+        is_edit: true,
       } as Imessage);
 
-      const {error} = await supabase.from("messages").update({text, is_edit:true}).eq("id",actionMessage?.id!);
+      const { error } = await supabase
+        .from("messages")
+        .update({ text, is_edit: true })
+        .eq("id", actionMessage?.id!);
 
       if (error) {
         toast.error(error.message);
@@ -98,12 +100,11 @@ export function EditAlert() {
         toast.success("Successfully Edited Message");
       }
       document.getElementById("trigger-edit")?.click();
-    }else{
+    } else {
       document.getElementById("trigger-edit")?.click();
       document.getElementById("trigger-delete")?.click();
     }
-
-  }
+  };
 
   return (
     <Dialog>
@@ -114,12 +115,18 @@ export function EditAlert() {
         <DialogHeader>
           <DialogTitle>Edit Message</DialogTitle>
           <DialogDescription>
-            Make changes to your message here. Click save when you're done.
+            Make changes to your message here. Click save when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
-        <Input id="username" defaultValue={actionMessage?.text} ref={inputRef}/>
+        <Input
+          id="username"
+          defaultValue={actionMessage?.text}
+          ref={inputRef}
+        />
         <DialogFooter>
-          <Button type="submit" onClick={handleEdit}>Save Changes</Button>
+          <Button type="submit" onClick={handleEdit}>
+            Save Changes
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
